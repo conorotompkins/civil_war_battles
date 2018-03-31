@@ -72,9 +72,21 @@ test <- unlist(battles_links[1,2])
 test
 get_battle(url = test)
 
-params <- battles_links[1:5,] %>% select(link)
-params
-battle_df <- pmap(params, get_battle) %>% bind_rows()
+params <- battles_links %>% 
+  select(link)
 
 params %>% 
-  map(get_battle)
+  unlist() %>% 
+  map(get_battle) %>% 
+  bind_rows() %>% 
+  mutate(id = row_number()) -> df_battles
+
+#write_csv(df_battles, "data/df_battles.csv")
+
+df_battles
+
+colnames(df_battles) <- c("campaign", "CWASC_reference_number", "dates", "description", 
+                          "estimated_casualties", "forces_engaged", "location", "other_names", 
+                          "preservation_priority", "principal_commanders", "results")
+df_battles %>% 
+  select()
